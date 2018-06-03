@@ -5,11 +5,7 @@ import {Directive, ElementRef, HostBinding, HostListener, Renderer2} from '@angu
 export class DropdownDirective {
   @HostBinding('class.open') isOpen: Boolean = false;
 
-  @HostListener('mouseenter') openDropdown() {
-    this.isOpen = !this.isOpen;
-  }
-
-  @HostListener('mouseleave') closeDropdown() {
+  @HostListener('click') toggleDropdown() {
     this.isOpen = !this.isOpen;
   }
 }
