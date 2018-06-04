@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onSaveData() {
-    this.dataStorageSercie.storeRecipes2().on('value', (snapshot) => {
+    this.dataStorageSercie.storeRecipes().on('value', (snapshot) => {
       console.log(`Data was saved`);
       console.log(snapshot.val());
     });
@@ -35,6 +35,7 @@ export class HeaderComponent implements OnInit {
           recipe['ingredients'] = [];
         }
       }
+      this.recipeService.setRecipes(recipes);
       console.log(snapshot.val());
     });
   }
