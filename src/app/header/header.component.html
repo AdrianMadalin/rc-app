@@ -15,20 +15,24 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a routerLink="/signup">Register</a></li>
-        <li><a routerLink="/signin">Sign in</a></li>
-        <li class="dropdown" appDropdown>
+        <ng-template>
+          <li><a routerLink="/signup">Register</a></li>
+          <li><a routerLink="/signin">Sign in</a></li>
+        </ng-template>
+
+        <li
+            class="dropdown" appDropdown>
           <a style="cursor:pointer;"
              class="dropdown-toggle"
-             role="button">Manage <span class="caret"></span></a>
+             role="button"> Manage <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li>
               <a style="cursor:pointer;"
-                    (click)="onSaveData()">Saving data</a>
+                 (click)="onSaveDataHttp()">Saving data</a>
             </li>
             <li>
               <a style="cursor:pointer;"
-                  (click)="onFetchData()">Fetch data</a>
+                 (click)="onFetchDataHttp()">Fetch data</a>
             </li>
           </ul>
         </li>

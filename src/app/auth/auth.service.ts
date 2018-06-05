@@ -3,6 +3,8 @@ import * as firebase from 'firebase';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
+  public token: string;
+
   constructor() {
   }
 
@@ -11,10 +13,24 @@ export class AuthService {
   }
 
   public signInUser(email: string, password: string) {
+    // firebase.auth().currentUser.getIdToken()
+    //   .then((token: string) => {
+    //     console.log(token);
+    //     this.token = token;
+    //   });
     return firebase.auth().createUserWithEmailAndPassword(email, password);
   }
 
   public getToken() {
-    return firebase.auth().currentUser.getIdToken();
+    firebase.auth().currentUser.getIdToken()
+      .then((token: string) => {
+        console.log(token);
+        this.token = token;
+      });
+    return this.token;
+  }
+
+  isAuthenticated() {
+    return this.token != null;
   }
 }

@@ -26,6 +26,15 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  onSaveDataHttp() {
+    this.dataStorageSercie.storeRecipesHttp()
+      .subscribe((response) => {
+        console.log(response);
+      }, (err) => {
+        console.log(err);
+      });
+  }
+
   onFetchData() {
     this.dataStorageSercie.getRecipes().on('value', (snapshot) => {
       const recipes: Recipe[] = snapshot.val();
@@ -38,5 +47,26 @@ export class HeaderComponent implements OnInit {
       this.recipeService.setRecipes(recipes);
       console.log(snapshot.val());
     });
+  }
+
+  onFetchDataHttp() {
+    this.dataStorageSercie.getRecipesHttp()
+      .map(
+        (response: any) => {
+          const recipes: Recipe[] = response;
+          for (const recipe of recipes) {
+            if (!recipe['ingredients']) {
+              recipe['ingredients'] = [];
+            }
+          }
+          return recipes;
+        })
+      .subscribe(
+        (recipes: Recipe[]) => {
+          this.recipeService.setRecipes(recipes);
+          console.log(recipes);
+        }, (err) => {
+          console.log(err);
+        });
   }
 }

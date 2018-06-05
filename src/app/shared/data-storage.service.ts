@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import {RecipeService} from '../recipes/recipe.service';
 
 import * as firebase from 'firebase';
 import {AuthService} from '../auth/auth.service';
+import {Recipe} from '../recipes/recipe.model';
 
 @Injectable({providedIn: 'root'})
 
@@ -25,9 +26,18 @@ export class DataStorageService {
   }
 
   public getRecipes() {
-    this.authService.getToken().then((token) => {
-      console.log(token);
-    }).catch((err) => console.log(err));
-    return firebase.database().ref('recipes');
+    return firebase.database().ref(`recipes`);
+  }
+
+  public storeRecipesHttp() {
+    const url = 'https://ng-recipe-book-fdb19.firebaseio.com/recipes.json';
+    return this.http.put(url, this.recipeService.getRecipes());
+  }
+
+  public getRecipesHttp() {
+    const url = 'https://ng-recipe-book-fdb19.firebaseio.com/recipes.json';
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(url, {headers});
   }
 }
