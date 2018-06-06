@@ -15,12 +15,15 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <ng-template>
+        <li><a (click)="getUser()" style="cursor: pointer">Get user</a></li>
+        <li><a (click)="authService.getToken()" style="cursor: pointer">Get token</a></li>
+
+        <ng-template [ngIf]="!authService.isAuthenticated()">
           <li><a routerLink="/signup">Register</a></li>
           <li><a routerLink="/signin">Sign in</a></li>
         </ng-template>
 
-        <li
+        <li *ngIf="authService.isAuthenticated()"
             class="dropdown" appDropdown>
           <a style="cursor:pointer;"
              class="dropdown-toggle"
@@ -35,6 +38,9 @@
                  (click)="onFetchDataHttp()">Fetch data</a>
             </li>
           </ul>
+        </li>
+        <li *ngIf="authService.isAuthenticated()">
+          <a (click)="onLogout()" style="cursor: pointer">Logout</a>
         </li>
       </ul>
     </div>

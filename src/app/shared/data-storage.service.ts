@@ -7,10 +7,11 @@ import * as firebase from 'firebase';
 import {AuthService} from '../auth/auth.service';
 import {Recipe} from '../recipes/recipe.model';
 
+import 'rxjs/add/operator/map';
+
 @Injectable({providedIn: 'root'})
 
 export class DataStorageService {
-  // const url = 'https://ng-recipe-book-fdb19.firebaseio.com/' + '.json';
 
   constructor(private http: HttpClient,
               private recipeService: RecipeService,
@@ -35,9 +36,32 @@ export class DataStorageService {
   }
 
   public getRecipesHttp() {
-    const url = 'https://ng-recipe-book-fdb19.firebaseio.com/recipes.json';
+    this.authService.getToken().then((token) => {
+      const url = `https://ng-recipe-book-fdb19.firebaseio.com/recipes.json?auth=${token}`;
+      this.getRecipesReq(url, token);
+    });
+  }
+
+  public getRecipesReq(url: string, token: string) {
     const headers = new HttpHeaders();
-    headers.append('Content-Type', 'application/json');
-    return this.http.get(url, {headers});
+    headers.append('Content-Type', 'application/json').append('Authorization', token);
+    this.http.get(url, {headers})
+      .map(
+        (response: any) => {
+          const recipes: Recipe[] = response;
+          for (const recipe of recipes) {
+            if (!recipe['ingredients']) {
+              recipe['ingredients'] = [];
+            }
+          }
+          return recipes;
+        })
+      .subscribe(
+        (recipes: Recipe[]) => {
+          this.recipeService.setRecipes(recipes);
+          console.log(recipes);
+        }, (err) => {
+          console.log(err);
+        });
   }
 }

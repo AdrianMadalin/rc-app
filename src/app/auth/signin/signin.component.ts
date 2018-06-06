@@ -23,6 +23,11 @@ export class SigninComponent implements OnInit {
     const password = form.value.password;
     this.authService.signUpUser(email, password)
       .then((response) => {
+        firebase.auth().currentUser.getIdToken(true)
+          .then((token) => {
+            console.log(token);
+            this.authService.token = token;
+          });
       console.log(response);
       this.router.navigate(['/']);
     }).catch( (error) => {
